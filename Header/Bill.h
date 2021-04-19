@@ -8,9 +8,9 @@ class Bill{
 	DetailBill *toDetailBill;
 };
 
-class listBill{
-	Bill data;
-	listBill *next;
+class BillNode{
+	Bill dataBill;
+	BillNode *next;
 };
 
 class DetailBill{
