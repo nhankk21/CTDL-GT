@@ -35,7 +35,7 @@ materialNode* createNode(const Material &data) {
 }
 int getNodeBalanceFactor(materialNode* node) {
 	if (node == NULL) return 0;
-	return getNodeHeight(materialNode->left) - getNodeHeight(materialNode->right);
+	return getNodeHeight(node->left) - getNodeHeight(node->right);
 }
 
 // Cay bi lech trai -> xoay ve ben phai
@@ -53,12 +53,12 @@ materialNode* rightRotate(materialNode* root) {
 
 materialNode* leftRotate(materialNode* root) {
 	// Xoay
-	materialNode* nextRoot = root-data>right;
+	materialNode* nextRoot = root->right;
 	root->right = nextRoot->left;
 	nextRoot->left = root;
 	
 	// Cap nhat lai do cao
-	root->height = max(getNodeHeight(root->next), getNodeHeight(root->right)) + 1;
+	root->height = max(getNodeHeight(root->left), getNodeHeight(root->right)) + 1;
 	nextRoot->height = max(getNodeHeight(nextRoot->left), getNodeHeight(nextRoot->right)) + 1;
 	return nextRoot;
 }
