@@ -6,7 +6,29 @@
 using namespace std;
 
 struct Material {
-	
+	string codeMaterial;
+	string nameMaterial;
+	string unitMaterial;
+	int quantity;
+	Material(){};
+	Material(const string code, const string name, const string unit, const int quantity) {
+		this->codeMaterial = code;
+		this->nameMaterial = name;
+		this->unitMaterial = unit;
+		this->quantity = quantity;
+	}
+	void operator = (const Material &material) {
+		this->codeMaterial = material.codeMaterial;
+		this->nameMaterial = material.nameMaterial;
+		this->unitMaterial = material.unitMaterial;
+		this->quantity = material.quantity;
+	}
+	bool operator > (const Material &material) {
+		return this->codeMaterial > material.codeMaterial;
+	}
+	bool operator < (const Material &material) {
+		return this->codeMaterial < material.codeMaterial;
+	}
 };
 
 struct materialNode {
@@ -163,7 +185,7 @@ materialNode* deleteNode(materialNode * &root, Material &data) {
 	// R - R
 	if (balance < -1 && getNodeBalanceFactor(root->right) <= 0) return leftRotate(root);
 	// R - L
-	if (balance < -1 && getNodeBalanceFactor(root->right > 0)) {
+	if (balance < -1 && getNodeBalanceFactor(root->right) > 0) {
 		root->right = rightRotate(root->right);
 		return leftRotate(root);
 	}
