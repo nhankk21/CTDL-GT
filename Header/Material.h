@@ -6,5 +6,5 @@ class Material{
 	char codeMaterial[11];
 	string nameMaterial;
 	string unitMaterial;
-	double stock;
+	int stock;
 };
