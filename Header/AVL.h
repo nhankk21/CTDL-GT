@@ -6,13 +6,35 @@
 using namespace std;
 
 struct Material {
-	
+	string codeMaterial;
+	string nameMaterial;
+	string unitMaterial;
+	int quantity;
+	Material(){};
+	Material(const string code, const string name, const string unit, const int quantity) {
+		this->codeMaterial = code;
+		this->nameMaterial = name;
+		this->unitMaterial = unit;
+		this->quantity = quantity;
+	}
+	void operator = (const Material &material) {
+		this->codeMaterial = material.codeMaterial;
+		this->nameMaterial = material.nameMaterial;
+		this->unitMaterial = material.unitMaterial;
+		this->quantity = material.quantity;
+	}
+	bool operator > (const Material &material) {
+		return this->codeMaterial > material.codeMaterial;
+	}
+	bool operator < (const Material &material) {
+		return this->codeMaterial < material.codeMaterial;
+	}
 };
 
 struct materialNode {
 	Material data;
-	Tree* left;
-	Tree* right;
+	materialNode* left;
+	materialNode* right;
 	int height;
 };
 
@@ -35,7 +57,7 @@ materialNode* createNode(const Material &data) {
 }
 int getNodeBalanceFactor(materialNode* node) {
 	if (node == NULL) return 0;
-	return getNodeHeight(materialNode->left) - getNodeHeight(materialNode->right);
+	return getNodeHeight(node->left) - getNodeHeight(node->right);
 }
 
 // Cay bi lech trai -> xoay ve ben phai
@@ -53,12 +75,12 @@ materialNode* rightRotate(materialNode* root) {
 
 materialNode* leftRotate(materialNode* root) {
 	// Xoay
-	materialNode* nextRoot = root-data>right;
+	materialNode* nextRoot = root->right;
 	root->right = nextRoot->left;
 	nextRoot->left = root;
 	
 	// Cap nhat lai do cao
-	root->height = max(getNodeHeight(root->next), getNodeHeight(root->right)) + 1;
+	root->height = max(getNodeHeight(root->left), getNodeHeight(root->right)) + 1;
 	nextRoot->height = max(getNodeHeight(nextRoot->left), getNodeHeight(nextRoot->right)) + 1;
 	return nextRoot;
 }
@@ -108,7 +130,65 @@ materialNode* insertNode(materialNode* &root, Material &data) {
 }
 
 materialNode* deleteNode(materialNode * &root, Material &data) {
+	if (root == NULL) return root;
 	
+	// Neu data < root->data de quy sang trai
+	if (data < root->data) {
+		root->left = deleteNode(root->left, data);
+	}
+	// Neu data > root->data de quy sang phai
+	else if (data > root->data) {
+		root->right = deleteNode(root->right, data);
+	}
+	// Neu bang
+	else {
+		// Neu la node la hoac node 1 con
+		if (root->left == NULL || root->right == NULL) {
+			materialNode *tmp = root->left ? root->left : root->right;
+			// Neu la node la (khong co con) 
+			if (tmp == NULL) {
+				tmp = root;
+				root = NULL;
+			}
+			else {
+				*root = *tmp;
+				delete(tmp);
+			}
+		}
+		// Node 2 con
+		else {
+			// Lay succesor node (la node nho nhat cua cay ben phai hoac node lon nhat cua cay ben trai)
+			materialNode *tmp = getMinNode(root->right);
+			// Copy data cua succesor node (node the mang) cho node can xoa
+			root->data = tmp->data;
+			// Xoa succesor node
+			root->right = deleteNode(root->right, tmp->data);
+		}
+		
+	}
+	// Sau khi xoa, neu cay chi co 1 node thi return
+	if (root == NULL) return root;
+	
+	// Cap nhat lai do cao cua node hien tai
+	root->height = max(getNodeHeight(root->left), getNodeHeight(root->right)) + 1;
+	
+	// Can bang lai cay
+	int balance = getNodeBalanceFactor(root);
+	// Co 4 truong hop can bang cay
+	// L - L
+	if (balance > 1 && getNodeBalanceFactor(root->left) >= 0) return rightRotate(root);
+	// L - R
+	if (balance > 1 && getNodeBalanceFactor(root->left) < 0) {
+		root->left = leftRotate(root->left);
+		return rightRotate(root);
+	}
+	// R - R
+	if (balance < -1 && getNodeBalanceFactor(root->right) <= 0) return leftRotate(root);
+	// R - L
+	if (balance < -1 && getNodeBalanceFactor(root->right) > 0) {
+		root->right = rightRotate(root->right);
+		return leftRotate(root);
+	}
 }
 
 
