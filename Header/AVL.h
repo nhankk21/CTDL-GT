@@ -1,7 +1,7 @@
 #include<string>
 #include<string.h>
 #include<fstream>
-#include<stdlib>
+#include<stdlib.h>
 
 using namespace std;
 
@@ -189,6 +189,20 @@ materialNode* deleteNode(materialNode * &root, Material &data) {
 		root->right = rightRotate(root->right);
 		return leftRotate(root);
 	}
+	
+	return root;
 }
 
+materialNode* searchNode(materialNode* root, const string key) {
+	materialNode* re = NULL;
+	while (root != NULL) {
+		if (key < root->data.codeMaterial) root = root->left;
+		else if (key > root.data.codeMaterial) root = root->right;
+		else {
+			re = root;
+			break;
+		}
+	}
+	return re;
+}
 
