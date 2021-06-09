@@ -456,7 +456,7 @@ class inputField: public UI {
 
 class Scroller: public UI {
 
-	Trigger<Scroller> upbutton,downbutton;
+	functionButton<Scroller> upbutton,downbutton;
 	
 	int* index;
 	int maxIndex;
@@ -475,8 +475,8 @@ class Scroller: public UI {
 		downY = upY + len;
 		centerX = upX;
 		centerY = upY;
-		upbutton=Trigger<Scroller>(upx,upY-height/2-10,20,20,pageup_basic_color,pageup_on_color,"^",&Scroller::Up);
-		downbutton=Trigger<Scroller>(upx,downY+height/2+10,20,20,pageup_basic_color,pageup_on_color,"v",&Scroller::Down);
+		upbutton=functionButton<Scroller>(upx,upY-height/2-10,20,20,pageup_basic_color,pageup_on_color,"^",&Scroller::Up);
+		downbutton=functionButton<Scroller>(upx,downY+height/2+10,20,20,pageup_basic_color,pageup_on_color,"v",&Scroller::Down);
 		
 		index=i;
 		*index=0;
