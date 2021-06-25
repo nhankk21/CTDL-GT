@@ -79,34 +79,49 @@ const int screenHeight = 700;
 const int listWidth = 1274;
 const int listHeight = 570;
 
+Time currentTime;
+
+
+void CatchTime(){
+	time_t currenttime = time(0);
+	tm* now = localtime(&currenttime);
+	currentTime.date = now->tm_mday;
+	currentTime.month = now->tm_mon + 1;
+	currentTime.year = now->tm_year + 1900;
+}
+
 const int BORDEROFFSET = 2;
 
 const int MAXSTOCK = 2e6 + 1; // 2 trieu phan tu
 
 bool isActive;
 
+//Anouncement
+float startTime = 0.f;
+char mess[81];
+
 int desR = 250, desG = 250, desB = 255;
 
 int drawR = 250, drawG = 250, drawB = 255;
 
-float timer=0.f;
-bool isappear=true;
+float timer = 0.f;
+bool isappear = true;
 
-void DrawTextPointer(int centerX, int centerY){
-	if((float)clock()/CLOCKS_PER_SEC>=timer){
-		timer=(float)clock()/CLOCKS_PER_SEC;
-		if(isappear) timer+=0.7f;
-		else timer+=0.7f;
-		isappear=!isappear;
+void DrawTextPointer(int centerX, int centerY) {
+	if ((float)clock() / CLOCKS_PER_SEC >= timer) {
+		timer = (float)clock() / CLOCKS_PER_SEC;
+		if(isappear) timer += 0.7f;
+		else timer += 0.7f;
+		isappear =! isappear;
 	}
-	if(isappear){
+	if (isappear){
 		setcolor(BLACK);
-		line(centerX,centerY-10,centerX,centerY+10);
+		line(centerX, centerY-10, centerX, centerY+10);
 	}
 }
 
-// Overload
-void outtextxy(int x, int y, long long value){
+// Override
+void outtextxy(int x, int y, long long value) {
 	char tmp[20];
 	lltoa(value, tmp, 10);
 	outtextxy(x, y, tmp);
@@ -115,55 +130,55 @@ void outtextxy(int x, int y, long long value){
 // Thong bao tren man hinh
 int messageposX = 1250, messageposY = 53;
 float dur;
-void ChangeMessage(const char* message){
+void ChangeMessage(const char* message) {
 	drawR = 247;
 	drawG = 100;
 	drawB = 64;
 	
-	startTime=(float)clock()/CLOCKS_PER_SEC;
-	dur=5.f;
-	strcpy(mess,"!");
-	strcat(mess,message);
+	startTime = (float)clock() / CLOCKS_PER_SEC;
+	dur = 5.f;
+	strcpy(mess, "!");
+	strcat(mess, message);
 }
 
-void PrintMessage(){
-	float ratio=((float)clock()/CLOCKS_PER_SEC-startTime)/dur;
-	if(ratio>1.f) ratio=1.f;
-	setbkcolor(getpixel(messageposX,messageposY));
-	if(ratio==1.f) setcolor(getpixel(messageposX,messageposY));
-	else setcolor(COLOR(drawR+(desR-drawR)*ratio,drawG+(desG-drawG)*ratio,drawB+(desB-drawB)*ratio));
-	outtextxy(messageposX-textwidth(mess),messageposY,mess);
+void PrintMessage() {
+	float ratio = ((float)clock() / CLOCKS_PER_SEC - startTime) / dur;
+	if (ratio > 1.f) ratio = 1.f;
+	setbkcolor(getpixel(messageposX, messageposY));
+	if (ratio == 1.f) setcolor(getpixel(messageposX ,messageposY));
+	else setcolor(COLOR(drawR + (desR - drawR) * ratio, drawG + (desG - drawG) * ratio, drawB + (desB - drawB) * ratio));
+	outtextxy(messageposX - textwidth(mess), messageposY, mess);
 	
 }
 
-////////////////////////////////////////////////////
+/////////
 
-void DrawTabBG(){
-	setfillstyle(SOLID_FILL,tab_basic_color);
-	bar(0,0,screenWidth,tab_height+BORDEROFFSET+3);
+void DrawTabBG() {
+	setfillstyle(SOLID_FILL, tab_basic_color);
+	bar(0, 0, screenWidth, tab_height + BORDEROFFSET + 3);
 }
-void DrawStatiscalWindow(){
-	setfillstyle(SOLID_FILL,smallwindow_bg_color);
-	bar(screenWidth/2-600,90,screenWidth/2+600,680);
+void DrawStatiscalWindow() {
+	setfillstyle(SOLID_FILL, smallwindow_bg_color);
+	bar(screenWidth / 2 - 600, 90, screenWidth / 2 + 600, 680);
 	setcolor(bg_border_color);
-	rectangle(screenWidth/2-600,90,screenWidth/2+600,680);
+	rectangle(screenWidth / 2 - 600, 90, screenWidth / 2 + 600, 680);
 	
 
 }
-void DrawInputWindow(char* text){
-		int width=700;
+void DrawInputWindow(char* text) {
+		int width = 700;
 		//
-		setfillstyle(SOLID_FILL,smallwindow_bg_color);
+		setfillstyle(SOLID_FILL, smallwindow_bg_color);
 		setcolor(smallwindow_bg_color);
-		bar(screenWidth/2-width/2,220,screenWidth/2+width/2,550);
+		bar(screenWidth / 2 - width / 2, 220, screenWidth / 2 + width / 2, 550);
 		setcolor(bg_border_color);
-		rectangle(screenWidth/2-width/2,220,screenWidth/2+width/2,550);
+		rectangle(screenWidth / 2 - width / 2, 220, screenWidth / 2 + width / 2, 550);
 		
 		setcolor(WHITE);
-		setfillstyle(SOLID_FILL,title_bg_color);
-		bar(400,180,900,220);
+		setfillstyle(SOLID_FILL, title_bg_color);
+		bar(400, 180, 900, 220);
 		setbkcolor(title_bg_color);	
-		outtextxy(650-textwidth(text)/2,190,text);
+		outtextxy(650 - textwidth(text) / 2, 190, text);
 }
 void DrawBG(){
 		setfillstyle(SOLID_FILL,bg_color);
@@ -318,7 +333,7 @@ typedef void(T::*Function)();
 	}
 };
 
-class inputField: public UI {
+class InputField: public UI {
 	private:
 	int index;
 	int maxChar;
@@ -330,9 +345,9 @@ class inputField: public UI {
 	int curAnounceColor;
 	int curBorderColor;
 	
-	public: inputField(){};
+	public: InputField(){};
 	
-	public: inputField(int x, int y, int maxch, int h, int basicColor, int onColor, const char* fieldName, char* inField, int textColor = BLACK): UI(x, y, (maxch + 2) * text_width, h, basicColor, onColor, textColor) {
+	public: InputField(int x, int y, int maxch, int h, int basicColor, int onColor, const char* fieldName, char* inField, int textColor = BLACK): UI(x, y, (maxch + 2) * text_width, h, basicColor, onColor, textColor) {
 		this->maxChar = maxch;
 		strcpy(this->fieldName, fieldName);
 		this->index = 0;
@@ -450,7 +465,7 @@ class inputField: public UI {
 	
 	public: void ParseString(char *to){
 		strcpy(to,field);
-		Standardized(to);////Chuan hoa chuoi
+		Standardized(to);// Chuan hoa chuoi
 	}
 };
 
@@ -493,9 +508,50 @@ class Scroller: public UI {
 		}
 		else curColor=basicColor,flag=false;
 	}
+	
+	public: void Action(const int& base) {
+		maxindex=base;
+		if(base<=0) {
+			UI:DrawUI();
+			*index=0;
+		}
+		else 	*index=round(base*(Distant(upX,upY,centerX,centerY)/len));//chi so tiep theo cho indice
+	
+		OnClick();
+		upbutton.Action(this);
+		downbutton.Action(this);
+	
+		
+		setfillstyle(SOLID_FILL,pageup_basic_color);
+		bar(upX-width/2,upY-height/2,upX+width/2,downY+height/2);
+		UI::DrawUI();
+	}
+	
+	private: void Up() {
+		*index=max(0,*index-1);
+		
+		double lastcur=Distant(upX,upY,centerX,centerY);
+		
+		/////////////////////Nho sua cai ham nay
+		double cur=(len*(*index))/maxindex;
+		double deltaMoveY=cur-lastcur;
+		centerY+=deltaMoveY;
+	}
+	private: void Down() {
+		*index=min(maxindex,*index+1);
+		
+		double lastcur=Distant(upX,upY,centerX,centerY);
+		
+		/////////////////////Nho sua cai ham nay
+		double cur=(len*(*index))/maxindex;
+		double deltaMoveY=cur-lastcur;
+		centerY+=deltaMoveY;
+	}
 };
 
 class Tab: public UI{
+	char text[30];
+	
 	public: Tab(){};
 	public: Tab(int x,int y,int w,int h,int basiccolor,int oncolor,const char* txt,int textColor=WHITE):UI(x,y,w,h,basiccolor,oncolor,textColor){//Goi constructor cua lop UI de khoi tao cho Tab
 		strcpy(text,txt);
@@ -516,5 +572,96 @@ class Tab: public UI{
 		DrawUI();
 	}
 	public: virtual void Action()=0;
-	char text[30];
+	
 };
+
+int CompareTime(const Time& a,const Time& b) {
+	if(a.year != b.year) {
+		if(a.year > b.year) return 1;
+		return -1;
+	}
+	else {
+		if(a.month != b.month) {
+			if(a.month > b.month) return 1;
+			return -1;
+		}
+		else {
+			if(a.date != b.date) {
+				if(a.date > b.date) return 1;
+				return -1;
+			}
+			else return 0;
+		}
+	}
+}
+
+bool CheckTime(InputField& datefield,InputField& monthfield,InputField& yearfield){
+	if(!datefield.CheckParseInt()||!monthfield.CheckParseInt()||!yearfield.CheckParseInt()) return false;
+	
+		Time t=Time(datefield.ParseInt(),monthfield.ParseInt(),yearfield.ParseInt());
+		if(CompareTime(currentTime,t)<0){
+			datefield.Anouncement("Hoa don o tuong lai ???", false);
+			return false;
+		}
+		
+		bool flag=true;
+		int date=datefield.ParseInt();
+		int month=monthfield.ParseInt();
+		int year=yearfield.ParseInt();
+		if(month<=0||month>12){
+			monthfield.Anouncement("Thang chi tu 1-12", false);
+			flag=false;
+		}
+		if(date<=0||date>31){
+			datefield.Anouncement("Ngay chi tu 1-31", false);
+			flag=false;
+		}
+		if(!flag) return false;
+		switch (month){
+			case 2:
+				{
+					if(year%4==0&&date>29){//nam nhuan nhe
+						datefield.Anouncement("Thang 2 co 29 ngay thoi", false);
+						return false;
+					}
+					else if(year%4!=0&&date>28){
+						datefield.Anouncement("Thang 2 co 28 ngay thoi", false);
+						return false;
+					}
+					break;
+				}
+			case 4:{
+				if(date>30){
+					datefield.Anouncement("Thang 4 co 30 ngay thoi", false);
+					return false;
+				}
+				break;
+			}
+			case 6:{
+				if(date>30){
+					datefield.Anouncement("Thang 6 co 30 ngay thoi", false);
+					return false;
+				}
+				break;
+			}
+			case 9:{
+				if(date>30){
+					datefield.Anouncement("Thang 9 co 30 ngay thoi", false);
+					return false;
+				}
+				break;
+			}
+			case 11:{
+				if(date>30){
+					datefield.Anouncement("Thang 11 co 30 ngay thoi", false);
+					return false;
+				}
+				break;
+			}
+	}
+	return true;
+}
+
+
+#endif
+
