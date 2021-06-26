@@ -14,13 +14,16 @@ class Bill{
 	}
 };
 
-struct Time {
+struct Time{
 	int date, month, year;
 	Time(){};
 	Time(const int &date, const int &month, const int &year) {
 		this->date = date;
 		this->month = month;
 		this->year = year;
+	}
+	void toDateString(string &s) {
+		s += to_string(date) + "/" + to_string(month) + "/" + to_string(year);
 	}
 }
 
@@ -52,6 +55,10 @@ class billDetail{
 	}
 };
 
-DetailBill listDetailBill[20];
+struct listDetail {
+	int n;
+	billDetail billDetailList[20]; // Toi da 20 vat tu
+};
+
 
 
