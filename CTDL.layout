@@ -2,9 +2,9 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-CursorCol=27
-CursorRow=81
-TopLine=73
+CursorCol=19
+CursorRow=6
+TopLine=244
 =======
 CursorCol=16
 CursorRow=320
@@ -22,21 +22,21 @@ TopLine=1
 >>>>>>> 1897502f7b5426461bdb572b41b5df105d63c0be
 LeftChar=1
 [Editor_3]
-CursorCol=5
-CursorRow=9
+CursorCol=1
+CursorRow=1
 TopLine=1
 LeftChar=1
 [Editors]
-Order=0,1,2,3,4
+Order=0,1
 Focused=0
 [Editor_1]
-CursorCol=15
-CursorRow=11
+CursorCol=1
+CursorRow=12
 TopLine=1
 LeftChar=1
 [Editor_2]
-CursorCol=2
-CursorRow=6
+CursorCol=8
+CursorRow=4
 TopLine=1
 LeftChar=1
 [Editor_4]
